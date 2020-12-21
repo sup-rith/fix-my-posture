@@ -7,6 +7,7 @@ const Video = () => {
 
   const [pauseClicked, setPauseClicked] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
+  const [correctPosture, setCorrectPosture] = useState(0);
 
   const webcamRef = useRef(null);
 
@@ -21,7 +22,7 @@ const Video = () => {
 
   const blurScreen = () => {
     document.body.style.filter = 'blur(10px)';
-    document.body.style.transition= '0.9s';
+    document.body.style.transition = '0.9s';
   };
 
   const removeBlur = () => {
@@ -42,7 +43,7 @@ const Video = () => {
   };
 
   const changePause = () => {
-    if(pauseClicked) {
+    if (pauseClicked) {
       console.log('Stopping');
       stopPosenet();
     } else {
@@ -58,26 +59,38 @@ const Video = () => {
       webcamRef.current.video.readyState === 4
     ) {
       // Get Video Properties
-      const video = webcamRef.current.video;
-      const videoWidth = webcamRef.current.video.videoWidth;
-      const videoHeight = webcamRef.current.video.videoHeight;
+      const {video, videoWidth, videoHeight} = getVideoProperties(webcamRef);
 
       // Set video width
-      webcamRef.current.video.width = videoWidth;
-      webcamRef.current.video.height = videoHeight;
+      setPosenetVideo(videoHeight, videoWidth);
 
       // Make Detections
-      const pose = await net.estimateSinglePose(video);
-
-      const leftEyePosition = pose.keypoints[1].position.y;
-      const rightEyePosition = pose.keypoints[2].position.y;
-
-      const goodPostureValues = Promise.all([leftEyePosition, rightEyePosition]);
-
-      await goodPostureValues.then((x) => console.log(x) )
-      // console.log('leftEye:: '+ leftEyePosition);
-      // console.log('rightEye:: ' + rightEyePosition);
+      await makeDetections(net, video).then(p => {
+        console.log(p);
+        return 10;
+      });
     }
+  };
+
+  const getVideoProperties = (webcamRef) => {
+    const video = webcamRef.current.video;
+    const videoWidth = webcamRef.current.video.videoWidth;
+    const videoHeight = webcamRef.current.video.videoHeight;
+
+    return {video, videoWidth, videoHeight};
+  };
+  const setPosenetVideo = (height, width) => {
+    webcamRef.current.video.height = height;
+    webcamRef.current.video.width = width;
+  }
+
+  const makeDetections = async (net, video) => {
+    const pose = await net.estimateSinglePose(video);
+    const leftEyePosition = pose.keypoints[1].position.y;
+    const rightEyePosition = pose.keypoints[2].position.y;
+
+    console.log('leftEye:: ' + leftEyePosition);
+    console.log('rightEye:: ' + rightEyePosition);
   };
 
   return (
@@ -96,8 +109,10 @@ const Video = () => {
         }}
       />
 
-      <button onClick={() => {changePause()}}>
-        {pauseClicked ? 'Stop': 'Start'}
+      <button onClick={() => {
+        changePause()
+      }}>
+        {pauseClicked ? 'Stop' : 'Start'}
       </button>
 
     </div>
