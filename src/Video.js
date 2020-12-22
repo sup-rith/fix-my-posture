@@ -20,7 +20,7 @@ const Video = () => {
     return detect(net);
   };
 
-  useEffect( () => {
+  useEffect(() => {
     async function poseNet() {
       const net = await posenet.load({
         inputResolution: {width: 640, height: 480},
@@ -105,7 +105,7 @@ const Video = () => {
     const pose = await net.estimateSinglePose(video);
     const leftEyePosition = pose.keypoints[1].position.y;
     setLeftEye(leftEyePosition);
-    console.log('Initial Eye position:: '+ leftEyePosition);
+    console.log('Initial Eye position:: ' + leftEyePosition);
   };
 
   const getRealtimePose = async (net, video) => {
@@ -139,7 +139,9 @@ const Video = () => {
         }}
       />
 
-      <button onClick={() => { changePause() }}>
+      <button onClick={() => {
+        changePause()
+      }}>
         {pauseClicked ? 'Stop' : 'Start'}
       </button>
 
