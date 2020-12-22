@@ -7,8 +7,8 @@ const Video = () => {
 
   const [pauseClicked, setPauseClicked] = useState(false);
   const [intervalId, setIntervalId] = useState(0);
-  const [leftEye, setLeftEye] = useState(0);
 
+  const [leftEye, setLeftEye] = useState(0);
   const webcamRef = useRef(null);
 
   const loadPosenet = async () => {
