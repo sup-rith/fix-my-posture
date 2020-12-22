@@ -95,10 +95,11 @@ const Video = () => {
 
     return {video, videoWidth, videoHeight};
   };
+
   const setVideoProperties = (height, width) => {
     webcamRef.current.video.height = height;
     webcamRef.current.video.width = width;
-  }
+  };
 
   const getInitialPose = async (net, video) => {
     const pose = await net.estimateSinglePose(video);
@@ -111,10 +112,7 @@ const Video = () => {
     const pose = await net.estimateSinglePose(video);
     const leftEyePosition = pose.keypoints[1].position.y;
     console.log('Real Time:: ' + leftEyePosition);
-
-
   };
-
 
   const blurScreen = () => {
     document.body.style.filter = 'blur(10px)';
