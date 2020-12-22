@@ -1,14 +1,14 @@
-# Fix-my-Posture
+# Fix-my-Posture aka (PostureUp)
 
 A noninvasive way to fix your posture using machine learning and your webcam. 
 
 ## Description
 
 PostureUp can help you reduce potential back, 
-neck and muscle pains in as little as 10 minutes a day. 
-It's designed specifically for the workplace to give you a comfortable and healthy seating experience. 
-With just a couple of simple adjustments, PostureUp can help improve your posture for increased comfort 
-while reducing muscle fatigue and muscle tension. 
+neck and muscle pains in as little as 10 minutes a day 👏. 
+It's designed specifically for the workplace 👨🏾‍💻 to give you a comfortable and healthy seating experience. 
+With just a couple of simple adjustments, PostureUp can help improve ⬆️ your posture for increased comfort 
+while reducing muscle fatigue and muscle tension. 💚
 Improve your posture today with PostureUp
 
 ##copy 
