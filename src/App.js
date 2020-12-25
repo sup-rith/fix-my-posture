@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Video from './Video';
+import Sketch from './sketch';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
           <li>Get in good posture</li>
           <li>Press Start</li>
         </ol>
-        <Video/>
+        <Sketch/>
       </header>
     </div>
   );
