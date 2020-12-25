@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
@@ -8,11 +8,12 @@ const Sketch = () => {
   //Interval
   let interval;
 
-  // Invoked onClick of start button
+// Invoked onClick of start button
   const startDetection = async () => {
+    // disable start button
+    document.getElementById('start').disabled = true;
     //Straight posture variable
     let straightPosture = 0;
-
 
     //Load posenet
     const net = await posenet.load();
@@ -27,7 +28,6 @@ const Sketch = () => {
       //get onStart posture coordinates
       const pose = await net.estimateSinglePose(video);
       straightPosture = Math.ceil(pose.keypoints[1].position.y);
-      console.log('Straight Posture:: ' + straightPosture);
     }
 
     const lowerBound = straightPosture - 10;
@@ -38,31 +38,38 @@ const Sketch = () => {
       interval = setInterval(async function () {
         const realTimePose = await net.estimateSinglePose(video);
         let eyePosition = Math.ceil(realTimePose.keypoints[1].position.y);
-        console.log(eyePosition);
 
         while (eyePosition < lowerBound || eyePosition > upperBound) {
-          console.log('Screen is blurry');
-          document.body.style.filter = 'blur(10px)';
-          document.body.style.transition = '.1s';
+          startBlur();
 
           eyePosition = await net.estimateSinglePose(video)
             .then(d => d.keypoints[1].position.y);
 
           if (eyePosition > lowerBound && eyePosition < upperBound) {
-            document.body.style.filter = 'blur(0px)';
+            stopBlur();
           }
         }
       }, 1000);
     }
   };
 
+  //Stops interval on stop button clicked
   const stopDetection = () => {
+    //Enable start button
+    document.getElementById('start').disabled = false;
     if (interval) {
       clearInterval(interval);
     }
   };
 
-
+  //Helper functions
+  const startBlur = () => {
+    document.body.style.filter = 'blur(10px)';
+    document.body.style.transition = '.1s';
+  };
+  const stopBlur = () => {
+    document.body.style.filter = 'blur(0px)';
+  };
   const getVideo = (webcamRef) => {
     const video = webcamRef.current.video;
     const videoWidth = webcamRef.current.video.videoWidth;
@@ -75,16 +82,13 @@ const Sketch = () => {
     webcamRef.current.video.width = width;
   };
 
-
   return (
     <div>
-      <button onClick={() => {
-        console.log('Started');
+      <button id={'start'} onClick={() => {
         startDetection();
       }}>Start
       </button>
       <button onClick={() => {
-        console.log('stopped');
         stopDetection();
       }}>Stop
       </button>
